@@ -1,0 +1,30 @@
+{
+  "name": "patientregistry",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/habeebolamide/patientregistryapi.git"
+  },
+  "author": "Adenubi Habeeb",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/habeebolamide/patientregistryapi/issues"
+  },
+  "homepage": "https://github.com/habeebolamide/patientregistryapi#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.0",
+    "mongoose": "^7.4.0",
+    "nodemon": "^3.0.1",
+    "pusher": "^5.1.3",
+    "socket.io": "^4.7.1"
+  }
+}
