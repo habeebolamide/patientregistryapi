@@ -1,15 +1,15 @@
 const Disease = require('../models/disease')
 const Group = require('../models/group');
-const message = require('../models/message');
+const ChatMessage = require('../models/message');
 const Patient = require('../models/patient')
-const Pusher = require("pusher");
+const Pusher = require('pusher');
 const pusher = new Pusher({
-  appId: "1641917",
-  key: "23770585f05335a622d6",
-  secret: "36acc5ff88b81a8c18a7",
-  cluster: "mt1",
-  useTLS: true
-});
+    appId: "1641917",
+    key: "23770585f05335a622d6",
+    secret: "36acc5ff88b81a8c18a7",
+    cluster: "mt1",
+    useTLS: true
+  });
 exports.createGroup = async(req,res) => {
   let disease =  await Disease.findOne({_id:req.body.diseaseId})
   if (!disease) {
@@ -37,30 +37,19 @@ exports.createGroup = async(req,res) => {
 }
 
 exports.sendMessage = async (req, res) => {
-  // const { text, user, group } = req.body;
 
-  // // Save the new message to MongoDB
-  // const newMessage = new message({
-  //   text,
-  //   user,
-  //   groupId,
-  // });
-
-  // newMessage.save((err, savedMessage) => {
-  //   if (err) {
-  //     console.error('Error saving message:', err);
-  //   } else {
-  //     // Broadcast the saved message to the corresponding group channel on Pusher
-  //     pusher.trigger(`group-${group}`, 'message', savedMessage);
-
-  //     res.status(200).json({ success: true });
-  //   }
-  // });
-  const { user, message } = req.body;
-  pusher.trigger('chat-channel', 'new-message', { user, message });
+  const { groupId, user, message } = req.body;
+  const newMessage = new ChatMessage({ groupId, user, message }); // Save the group with the message
+  await newMessage.save();
+  pusher.trigger(groupId, 'new-message', { user, message });
   res.json({ success: true });
 };
 
+exports.getMessages = async (req,res) => {
+  const groupId = req.params.groupId;
+  const messages = await ChatMessage.find({ groupId });
+  res.json(messages);
+}
 
 exports.joinGroup = async (req, res) => {
   const groupId = req.params.groupId; // Assuming you have the groupId in the request params

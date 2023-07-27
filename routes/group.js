@@ -9,6 +9,7 @@ router
       .post('/createGroup', mustBeLoggedIn, groupController.createGroup)
       .post('/messages', mustBeLoggedIn, groupController.sendMessage)
       .post('/:groupId/joinGroup', mustBeLoggedIn, groupController.joinGroup)
+      .get('/:groupId/messages', mustBeLoggedIn, groupController.getMessages)
       .get('/all', mustBeLoggedIn, groupController.getGroups)
       .get('/patientgroup', mustBeLoggedIn, groupController.MyGroup)
 
