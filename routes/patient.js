@@ -1,7 +1,7 @@
 const express = require( 'express' )
 const router = express.Router();
 router.use(express.json())
-const patientController = require('../controllers/PatientController')
+const patientController = require('../controllers/patientController')
 
 
 router.post('/register', patientController.createPatient)
