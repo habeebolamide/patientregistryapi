@@ -15,9 +15,9 @@ const accessToken = (payload) => new Promise((resolve, reject) => {
 const mustBeLoggedIn = (req, res, next) => {
   let token = req.headers["x-access-token"] || req.headers.authorization || req.body.token;
   // Express headers are auto converted to lowercase
-  if (token && token.startsWith("Bearer")) {
+  if (token && token.startsWith("Bearer ")) {
     // Remove Bearer from string
-    token = token.slice(7, token.length).trimLeft();
+    token = token.slice(7, token.length).replace(/"/g, '').trimLeft();
   }
   try {
     req.apiUser = JWT.verify(token, process.env.JWT_KEY);

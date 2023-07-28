@@ -17,3 +17,11 @@ exports.createDisease  = (req,res) =>{
         })
     })
 }
+
+exports.getDiseases = async (req,res) => {
+    let diseases = await Disease.find()
+
+    res.json({
+        diseases
+    })
+}

@@ -21,7 +21,7 @@ const pusher = new Pusher({
   });
   
 
-mongoose.connect('mongodb://localhost/patientregistry').then(() => {
+mongoose.connect(process.env.MONGO_URI).then(() => {
     console.log('Connected Successfully');
 }).catch((err) => {
     console.log(err);
