@@ -72,6 +72,7 @@ exports.joinGroup = async (req, res) => {
     const group = await Group.findById(groupId);
     if (!group) {
       return res.status(404).json({
+        status:false,
         message: "Group Not Found",
       });
     }
@@ -79,6 +80,7 @@ exports.joinGroup = async (req, res) => {
     // Check if the patient is already a member of the group
     if (group.members.includes(res.locals.user._id)) {
       return res.status(400).json({
+        status:false,
         message: "You are already a member of this group.",
       });
     }
