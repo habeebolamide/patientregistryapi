@@ -47,8 +47,8 @@ exports.createGroup = async (req, res) => {
 };
 
 exports.sendMessage = async (req, res) => {
-  const { groupId, user, message } = req.body;
-  const newMessage = new ChatMessage({ groupId, user, message }); // Save the group with the message
+  const { groupId, user, message,avatar } = req.body;
+  const newMessage = new ChatMessage({ groupId, user, message,avatar }); // Save the group with the message
   await newMessage.save();
   pusher.trigger(groupId, "new-message", { user, message });
   res.json({ success: true });

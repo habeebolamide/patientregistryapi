@@ -8,6 +8,7 @@ const group = require('./routes/group')
 const disease = require('./routes/disease')
 app.use(express.json())
 app.use(cors());
+app.use('/uploads', express.static('uploads'))
 app.use('/api/v1/patient', patient);
 app.use('/api/v1/group', group);
 app.use('/api/v1/disease', disease);
