@@ -48,7 +48,6 @@ exports.login =  async(req, res, next) => {
 
   Patient.findOne({ email: email })
     .then((patient) => {
-      if (patient) {
         bcrypt.compare(password, patient.password, async function (err, result) {
           if (err) {
             res.json({
@@ -64,15 +63,10 @@ exports.login =  async(req, res, next) => {
             });
           } else {
             res.status(404).json({
-              message: "Invalid password",
+              message: "Invalid Credentials",
             });
           }
         });
-      } else {
-        res.status(404).json({
-          message: "No User Found",
-        });
-      }
     })
     .catch((err) => {
       res.status(404).json({

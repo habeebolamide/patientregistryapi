@@ -13,6 +13,6 @@ router
       .get('/:groupId/messages', mustBeLoggedIn, groupController.getMessages)
       .get('/all', mustBeLoggedIn, groupController.getGroups)
       .get('/patientgroup', mustBeLoggedIn, groupController.MyGroup)
-
+                        
 
 module.exports = router
