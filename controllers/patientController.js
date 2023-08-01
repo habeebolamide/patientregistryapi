@@ -8,6 +8,7 @@ cloudinary.config({
   api_key: '516413365421229', 
   api_secret: 'oBlNnA28Qy978cacZSeLxoffqa8' 
 });
+
 exports.createPatient = async (req,res) => {
     bcrypt.hash(req.body.password, 10 , async function(err, hashedPass) {
         if (err) {
@@ -42,7 +43,7 @@ exports.createPatient = async (req,res) => {
     })
 }
 
-exports.login =  async(req, res, next) => {
+exports.login =  async(req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
@@ -63,7 +64,7 @@ exports.login =  async(req, res, next) => {
             });
           } else {
             res.status(404).json({
-              message: "Invalid Credentials",
+              error: "Invalid Credentials",
             });
           }
         });
@@ -90,6 +91,7 @@ exports.me = async(req,res) =>{
       })
   })
 }
+
 exports.upload = async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.file.path);
