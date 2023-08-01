@@ -61,7 +61,7 @@ exports.getMessages = async (req, res) => {
 };
 
 exports.joinGroup = async (req, res) => {
-  const groupId = req.params.groupId; // Assuming you have the groupId in the request params
+  const groupId = req.params.groupId; 
    const patient = await Patient.findOne({ _id: res.locals.user._id });
     if (!patient) {
       return res.status(404).json({
@@ -93,6 +93,55 @@ exports.joinGroup = async (req, res) => {
       message: "You have successfully joined this group.",
     });
 };
+
+exports.leaveGroup = async (req, res) => {
+  const groupId = req.params.groupId;
+  const patientId = res.locals.user._id;
+
+  try {
+    // Find the patient
+    const patient = await Patient.findById(patientId);
+    if (!patient) {
+      return res.status(404).json({
+        status: false,
+        message: "Patient Not Found",
+      });
+    }
+
+    // Find the group
+    const group = await Group.findById(groupId);
+    if (!group) {
+      return res.status(404).json({
+        status: false,
+        message: "Group Not Found",
+      });
+    }
+
+    // Check if the patient is a member of the group
+    if (!group.members.includes(patientId)) {
+      return res.status(400).json({
+        status: false,
+        message: "You are not a member of this group.",
+      });
+    }
+
+    // Remove the patient from the group members
+    group.members = group.members.filter((member) => member.toString() !== patientId);
+    await group.save();
+
+    return res.json({
+      message: "You have successfully left this group.",
+      status: true,
+    });
+  } catch (error) {
+    console.error("Error leaving group:", error);
+    return res.status(500).json({
+      status: false,
+      message: "Failed to leave the group. Please try again later.",
+    });
+  }
+};
+
 
 exports.getGroups = async (req, res) => {
   try {
