@@ -96,7 +96,7 @@ exports.upload = async (req, res) => {
   try {
     const result = await cloudinary.uploader.upload(req.file.path);
 
-    Patient.findByIdAndUpdate(
+    Patient.findByIdAndUpdate(      
       { _id: res.locals.user._id },
       { avatar: result.secure_url }
     )
