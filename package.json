@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/habeebolamide/patientregistryapi#readme",
   "dependencies": {
+    "argon2": "^0.31.0",
     "bcrypt": "^5.1.0",
     "cloudinary": "^1.39.0",
     "cors": "^2.8.5",

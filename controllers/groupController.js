@@ -3,6 +3,7 @@ const Group = require("../models/group");
 const ChatMessage = require("../models/message");
 const Patient = require("../models/patient");
 const Pusher = require("pusher");
+const argon2 = require('argon2');
 const pusher = new Pusher({
   appId: "1641917",
   key: "23770585f05335a622d6",
@@ -12,17 +13,32 @@ const pusher = new Pusher({
 });
 
 exports.createGroup = async (req, res) => {
-  let disease = await Disease.findOne({ _id: req.body.diseaseId });
-  if (!disease) {
-    return res.status(404).json({
-      message: "Disease Does Not Exist",
-    });
-  }
+  // let disease = await Disease.findOne({ _id: req.body.diseaseId });
+  // if (!disease) {
+  //   return res.status(404).json({
+  //     message: "Disease Does Not Exist",
+  //   });
+  // }
   try {
-    let group = new Group({
+    let hash; 
+
+    if (req.body.isLocked == 'true') {
+      hash = await argon2.hash(req.body.password);
+      // return console.log(hash);
+    }
+
+    let groupData = {
       name: req.body.name,
       disease: req.body.diseaseId,
-    });
+      isLocked:req.body.isLocked
+    };
+
+    if (hash) {
+      groupData.password = hash
+    }
+    
+    const group = new Group(groupData);
+
     group
       .save()
       .then((result) => {
@@ -41,7 +57,7 @@ exports.createGroup = async (req, res) => {
       });
   } catch (error) {
     return res.json({
-      error: err,
+      error: error,
     });
   }
 };
@@ -50,14 +66,15 @@ exports.sendMessage = async (req, res) => {
   const { groupId, user, message,avatar } = req.body;
   const newMessage = new ChatMessage({ groupId, user, message,avatar }); // Save the group with the message
   await newMessage.save();
-  pusher.trigger(groupId, "new-message", { user, message });
   ChatMessage.findByIdAndUpdate(
     { groupId: groupId },
     {
      avatar:avatar
     }
   ).then(() => {
+    pusher.trigger(groupId, "new-message", { user, message });
   });
+
   res.json({ success: true });
 };
 
@@ -68,37 +85,52 @@ exports.getMessages = async (req, res) => {
 };
 
 exports.joinGroup = async (req, res) => {
-  const groupId = req.params.groupId; 
-   const patient = await Patient.findOne({ _id: res.locals.user._id });
-    if (!patient) {
-      return res.status(404).json({
-        message: "Patient Not Found",
-      });
-    }
+  try {
+    const groupId = req.params.groupId; 
+    const patient = await Patient.findOne({ _id: res.locals.user._id });
+     if (!patient) {
+       return res.status(404).json({
+         message: "Patient Not Found",
+       });
+     }
+ 
+     const group = await Group.findById(groupId);
+     if (!group) {
+       return res.status(404).json({
+         status:false,
+         message: "Group Not Found",
+       });
+     }
+     if (group.isLocked == "true") {
+       if (await argon2.verify(group.password, req.body.password)) {
+         console.log("confirm password");
+       } else {
+         return res.status(400).json({
+           status:false,
+           message: "Invalid Credentials",
+         });
+       }
+     }
+     // Check if the patient is already a member of the group
+     if (group.members.includes(res.locals.user._id)) {
+       return res.status(400).json({
+         status:false,
+         message: "You are already a member of this group.",
+       });
+     }
+ 
+     // Add the patient to the group members
+     group.members.push(res.locals.user._id);
+     await group.save();
+ 
+     return res.json({
+       message: "You have successfully joined this group.",
+     });
+  } catch (error) {
+    console.log(12345);
+    console.log(error);
+  }
 
-    const group = await Group.findById(groupId);
-    if (!group) {
-      return res.status(404).json({
-        status:false,
-        message: "Group Not Found",
-      });
-    }
-
-    // Check if the patient is already a member of the group
-    if (group.members.includes(res.locals.user._id)) {
-      return res.status(400).json({
-        status:false,
-        message: "You are already a member of this group.",
-      });
-    }
-
-    // Add the patient to the group members
-    group.members.push(res.locals.user._id);
-    await group.save();
-
-    return res.json({
-      message: "You have successfully joined this group.",
-    });
 };
 
 exports.leaveGroup = async (req, res) => {

@@ -16,7 +16,18 @@ const groupSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Disease',
       required:true
-    }
+    },
+
+    isLocked :{
+      type: String,
+      enum:['true','false'],
+      default:'false'
+    },
+
+    password: {
+      type: String,
+    },
+
   },
   { timestamps: true }
 );
