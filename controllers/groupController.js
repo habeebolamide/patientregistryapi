@@ -66,22 +66,20 @@ exports.sendMessage = async (req, res) => {
   const { groupId, user, message,avatar } = req.body;
   const newMessage = new ChatMessage({ groupId, user, message,avatar }); // Save the group with the message
   await newMessage.save();
-  ChatMessage.findByIdAndUpdate(
-    { groupId: groupId },
-    {
-     avatar:avatar
-    }
-  ).then(() => {
-    pusher.trigger(groupId, "new-message", { user, message });
-  });
-
+  pusher.trigger(groupId, "new-message", { user, message });
   res.json({ success: true });
 };
 
 exports.getMessages = async (req, res) => {
-  const groupId = req.params.groupId;
-  const messages = await ChatMessage.find({ groupId });
-  res.json(messages);
+  try {
+    const groupId = req.params.groupId;
+    const messages = await ChatMessage.find({ groupId });
+    res.json(messages);
+  } catch (error) {
+    console.log(12345);
+    console.log(error);
+  }
+
 };
 
 exports.joinGroup = async (req, res) => {
