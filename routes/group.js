@@ -6,6 +6,7 @@ const groupController = require('../controllers/groupController')
 
 
 router
+      .post('/webhook', groupController.webHook)
       .post('/createGroup', mustBeLoggedIn, groupController.createGroup)
       .post('/messages', mustBeLoggedIn, groupController.sendMessage)
       .post('/:groupId/joinGroup', mustBeLoggedIn, groupController.joinGroup)

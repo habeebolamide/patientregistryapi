@@ -12,6 +12,24 @@ const pusher = new Pusher({
   useTLS: true,
 });
 
+exports.webHook = async(req,res) => {
+  const signature = req.get('X-Webhook-Signature');
+    const signingKey = 'z15dofXWdq/ax0wI08wwquxz3jBUrUuHGQRqLMxJuIw=';
+
+    const expectedSignature = createHmac('sha256', signingKey)
+        .update(JSON.stringify(req.body))
+        .digest('base64')
+
+    if (signature !== expectedSignature) {
+        return res.status(400).json({
+            message: 'Invalid signature'
+        });
+    }
+
+    res.json({
+        message: 'ok'
+    })
+}
 exports.createGroup = async (req, res) => {
   // let disease = await Disease.findOne({ _id: req.body.diseaseId });
   // if (!disease) {
