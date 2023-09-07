@@ -4,6 +4,7 @@ const ChatMessage = require("../models/message");
 const Patient = require("../models/patient");
 const Pusher = require("pusher");
 const argon2 = require('argon2');
+const { createHmac } = require('crypto');
 const pusher = new Pusher({
   appId: "1641917",
   key: "23770585f05335a622d6",
@@ -12,7 +13,7 @@ const pusher = new Pusher({
   useTLS: true,
 });
 
-exports.webHook = async(req,res) => {
+exports.webHook = async (req,res) => {
   const signature = req.get('X-Webhook-Signature');
     const signingKey = 'z15dofXWdq/ax0wI08wwquxz3jBUrUuHGQRqLMxJuIw=';
 
