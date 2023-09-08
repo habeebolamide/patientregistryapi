@@ -3,6 +3,7 @@ const Group = require("../models/group");
 const ChatMessage = require("../models/message");
 const Patient = require("../models/patient");
 const Pusher = require("pusher");
+const { Respondio } = require('respondio');
 const argon2 = require('argon2');
 const { createHmac } = require('crypto');
 const { createLogger, transports, format } = require('winston');
@@ -17,35 +18,8 @@ const pusher = new Pusher({
 });
 
 exports.webHook = async (req,res) => {// Define a custom log format
-  const logFormat = printf(({ level, message, timestamp }) => {
-    return `${timestamp} [${level.toUpperCase()}]: ${message}`;
-  });
-
-  const logger = createLogger({
-    level: 'info', // Set your desired log level
-    format: combine(
-      timestamp(),
-      logFormat
-    ),
-    transports: [
-      new transports.File({
-        filename: 'logs/app.log', // Set the log file name and location
-        maxsize: 5 * 1024 * 1024, // Maximum log file size (5MB in this example)
-        maxFiles: 5, // Number of log files to keep
-        tailable: true, // Enable daily log rotation
-      }),
-    ],
-  });
-  logger.info(JSON.stringify(req.body, null, 2));
-  const signature = req.get('X-Webhook-Signature');
-    const signingKey = 'z15dofXWdq/ax0wI08wwquxz3jBUrUuHGQRqLMxJuIw=';
-
-    const expectedSignature = createHmac('sha256', signingKey)
-        .update(JSON.stringify(req.body))
-        .digest('base64')
-
     let webhook = new Webhook({
-      webhook:JSON.stringify(req.body),
+      webhook:req.body.message.message,
     })
     webhook.save().then((res) => {
       console.log('Saved Webhook');
