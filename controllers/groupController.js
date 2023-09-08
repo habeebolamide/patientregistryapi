@@ -44,18 +44,18 @@ exports.webHook = async (req,res) => {// Define a custom log format
         .update(JSON.stringify(req.body))
         .digest('base64')
 
+    let webhook = new Webhook({
+      webhook:JSON.stringify(req.body),
+    })
+    webhook.save().then((res) => {
+      console.log('Saved Webhook');
+    })
     if (signature !== expectedSignature) {
         return res.status(400).json({
             message: 'Invalid signature'
         });
     }
-    let webhook = new webhook({
-      webhook:JSON.stringify(req.body),
-    })
 
-    webhook.save().then((res) => {
-      console.log('Saved Webhook');
-    })
     res.json({
         message: 'ok'
     })
