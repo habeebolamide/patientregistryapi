@@ -22,7 +22,8 @@ exports.webHook = async (req,res) => {// Define a custom log format
       webhook:req.body.message.message,
     })
     let identifier = `'phone'+''+${req.body.contact.phone}`
-    const apiUrl = `https://api.respond.io/v2/contact/${identifier}/message`; // Replace with your API URL
+    console.log(identifier);
+    const apiUrl = `https://api.respond.io/v2/contact/${identifier}/message`; 
     const payload = {
       "channelId": 0,
       "message": {
@@ -44,11 +45,11 @@ exports.webHook = async (req,res) => {// Define a custom log format
     webhook.save().then((res) => {
       console.log('Saved Webhook');
     })
-    if (signature !== expectedSignature) {
-        return res.status(400).json({
-            message: 'Invalid signature'
-        });
-    }
+    // if (signature !== expectedSignature) {
+    //     return res.status(400).json({
+    //         message: 'Invalid signature'
+    //     });
+    // }
 
     res.json({
         message: 'ok'
