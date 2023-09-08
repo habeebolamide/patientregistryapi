@@ -21,7 +21,7 @@ exports.webHook = async (req,res) => {// Define a custom log format
     let webhook = new Webhook({
       webhook:req.body.message.message,
     })
-    let identifier = `'phone'+''+${req.body.contact.phone}`
+    let identifier = `'phone:'+''+${req.body.contact.phone}`
     console.log(identifier);
     const apiUrl = `https://api.respond.io/v2/contact/${identifier}/message`; 
     const payload = {
@@ -33,7 +33,14 @@ exports.webHook = async (req,res) => {// Define a custom log format
       }
     };
 
-  axios.post(apiUrl, payload)
+    const headers = {
+      'Content-Type': 'application/json', // Set the content type based on your API's requirements
+      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Mzc5NSwic3BhY2VJZCI6MTc3MTU1LCJvcmdJZCI6MTc3NjUyLCJ0eXBlIjoiYXBpIiwiaWF0IjoxNjk0MDg5MjY3fQ.3FYAMhBmN0UONwq7DlsFd9vNZqu2_WaAriy7myaJgzQ', // Add any authorization headers if needed
+    };
+
+  axios.post(apiUrl, payload, {
+    headers: headers,
+  })
   .then((response) => {
     // Handle the response here
     console.log('Response data:', response.data);
