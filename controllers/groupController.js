@@ -18,9 +18,6 @@ const pusher = new Pusher({
 });
 
 exports.webHook = async (req,res) => {// Define a custom log format
-    let webhook = new Webhook({
-      webhook:req.body.message.message,
-    })
     let identifier = 'phone:' + req.body.contact.phone
     const apiUrl = `https://api.respond.io/v2/contact/${identifier}/message`; 
     let message;
@@ -47,16 +44,17 @@ exports.webHook = async (req,res) => {// Define a custom log format
     headers: headers,
   })
   .then((response) => {
-    // Handle the response here
+    let webhook = new Webhook({
+      webhook:JSON.stringify(req.body),
+    })
+    webhook.save().then((res) => {})
     console.log('Response data:', response.data);
   })
   .catch((error) => {
     // Handle any errors here
-    console.error('Error:', error.message);
+    console.error('Error:', error);
   });
-    webhook.save().then((res) => {
-      console.log('Saved Webhook');
-    })
+
     // if (signature !== expectedSignature) {
     //     return res.status(400).json({
     //         message: 'Invalid signature'
