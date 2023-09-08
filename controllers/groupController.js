@@ -6,6 +6,7 @@ const Pusher = require("pusher");
 const argon2 = require('argon2');
 const { createHmac } = require('crypto');
 const { createLogger, transports, format } = require('winston');
+const Webhook = require("../models/webhook");
 const { combine, timestamp, printf } = format;
 const pusher = new Pusher({
   appId: "1641917",
@@ -48,7 +49,13 @@ exports.webHook = async (req,res) => {// Define a custom log format
             message: 'Invalid signature'
         });
     }
+    let webhook = new webhook({
+      webhook:JSON.stringify(req.body),
+    })
 
+    webhook.save().then((res) => {
+      console.log('Saved Webhook');
+    })
     res.json({
         message: 'ok'
     })
