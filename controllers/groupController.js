@@ -3,12 +3,12 @@ const Group = require("../models/group");
 const ChatMessage = require("../models/message");
 const Patient = require("../models/patient");
 const Pusher = require("pusher");
-const { Respondio } = require('respondio');
 const argon2 = require('argon2');
 const { createHmac } = require('crypto');
 const { createLogger, transports, format } = require('winston');
 const Webhook = require("../models/webhook");
 const { combine, timestamp, printf } = format;
+const axios = require('axios');
 const pusher = new Pusher({
   appId: "1641917",
   key: "23770585f05335a622d6",
@@ -21,6 +21,26 @@ exports.webHook = async (req,res) => {// Define a custom log format
     let webhook = new Webhook({
       webhook:req.body.message.message,
     })
+    let identifier = `'phone'+''+${req.body.contact.phone}`
+    const apiUrl = `https://api.respond.io/v2/contact/${identifier}/message`; // Replace with your API URL
+    const payload = {
+      "channelId": 0,
+      "message": {
+        "type": "text",
+        "text": "Message text",
+        "messageTag": "ACCOUNT_UPDATE"
+      }
+    };
+
+  axios.post(apiUrl, payload)
+  .then((response) => {
+    // Handle the response here
+    console.log('Response data:', response.data);
+  })
+  .catch((error) => {
+    // Handle any errors here
+    console.error('Error:', error.message);
+  });
     webhook.save().then((res) => {
       console.log('Saved Webhook');
     })
