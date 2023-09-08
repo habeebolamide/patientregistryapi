@@ -22,14 +22,18 @@ exports.webHook = async (req,res) => {// Define a custom log format
       webhook:req.body.message.message,
     })
     let identifier = 'phone:' + req.body.contact.phone
-    console.log(identifier);
     const apiUrl = `https://api.respond.io/v2/contact/${identifier}/message`; 
-    console.log(apiUrl);
+    let message;
+    if (req.body.message.message.text == 'werey') {
+      message = 'Oloshi'
+    }else if(req.body.message.message.text == 'omo iya haffa na'){
+      message = 'Omo sapa wan kill me jhare'
+    }
     const payload = {
-      "channelId": 158390,
+      "channelId": req.body.message.channelId,
       "message": {
         "type": "text",
-        "text": "Message text",
+        "text": message,
         "messageTag": ""
       }
     };
