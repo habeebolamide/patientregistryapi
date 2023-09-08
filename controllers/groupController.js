@@ -21,7 +21,7 @@ exports.webHook = async (req,res) => {// Define a custom log format
     let webhook = new Webhook({
       webhook:req.body.message.message,
     })
-    let identifier = `'phone:'+''+${req.body.contact.phone}`
+    let identifier = 'phone:' + req.body.contact.phone
     console.log(identifier);
     const apiUrl = `https://api.respond.io/v2/contact/${identifier}/message`; 
     const payload = {
