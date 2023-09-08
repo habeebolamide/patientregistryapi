@@ -26,11 +26,11 @@ exports.webHook = async (req,res) => {// Define a custom log format
     const apiUrl = `https://api.respond.io/v2/contact/${identifier}/message`; 
     console.log(apiUrl);
     const payload = {
-      "channelId": 0,
+      "channelId": 158390,
       "message": {
         "type": "text",
         "text": "Message text",
-        "messageTag": "ACCOUNT_UPDATE"
+        "messageTag": ""
       }
     };
 
