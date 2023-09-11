@@ -17,15 +17,17 @@ const pusher = new Pusher({
   useTLS: true,
 });
 
-exports.webHook = async (req,res) => {// Define a custom log format
+exports.webHook = async (req,res) => {
     let identifier = 'phone:' + req.body.contact.phone
     const apiUrl = `https://api.respond.io/v2/contact/${identifier}/message`; 
-    let message;
-    if (req.body.message.message.text == 'werey') {
+    let message = '';
+
+    if (req.body.message.message.text == 'werey' ) {
       message = 'Oloshi'
     }else if(req.body.message.message.text == 'omo iya haffa na'){
       message = 'Omo sapa wan kill me jhare'
     }
+
     const payload = {
       "channelId": req.body.message.channelId,
       "message": {
