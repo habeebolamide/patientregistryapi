@@ -20,13 +20,12 @@ const pusher = new Pusher({
 exports.webHook = async (req,res) => {
     let identifier = 'phone:' + req.body.contact.phone
     const apiUrl = `https://api.respond.io/v2/contact/${identifier}/message`; 
-    console.log(apiUrl);
     let message = '';
 
-    if (req.body.message.message.text == 'werey' ) {
-      message = 'Oloshi'
-    }else if(req.body.message.message.text == 'omo iya haffa na'){
-      message = 'Omo sapa wan kill me jhare'
+    if (req.body.message.message.text == 'Hi' ) {
+      message = 'Hello, How can i help you today !'
+    }else if(req.body.message.message.text == 'What is your name'){
+      message = 'My name is leke from EDUTams'
     }
 
     const payload = {
