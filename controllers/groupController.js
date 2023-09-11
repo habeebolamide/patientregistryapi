@@ -20,6 +20,7 @@ const pusher = new Pusher({
 exports.webHook = async (req,res) => {
     let identifier = 'phone:' + req.body.contact.phone
     const apiUrl = `https://api.respond.io/v2/contact/${identifier}/message`; 
+    console.log(apiUrl);
     let message = '';
 
     if (req.body.message.message.text == 'werey' ) {
@@ -32,7 +33,7 @@ exports.webHook = async (req,res) => {
       "channelId": req.body.message.channelId,
       "message": {
         "type": "text",
-        "text": message,
+        "text": 'werey',
         "messageTag": ""
       }
     };
