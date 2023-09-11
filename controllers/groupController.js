@@ -24,9 +24,9 @@ exports.webHook = async (req,res) => {
     let message = '';
 
     if (req.body.message.message.text == 'werey' ) {
-      return message = 'Oloshi'
+      message = 'Oloshi'
     }else if(req.body.message.message.text == 'omo iya haffa na'){
-      return message = 'Omo sapa wan kill me jhare'
+      message = 'Omo sapa wan kill me jhare'
     }
 
     const payload = {
