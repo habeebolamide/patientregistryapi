@@ -27,6 +27,9 @@ exports.webHook = async (req,res) => {
     }else if(req.body.message.message.text == 'What is your name'){
       message = 'My name is leke from EDUTams'
     }
+    else{
+      message = 'My name is leke from EDUTams'
+    }
 
     const payload = {
       "channelId": req.body.message.channelId,
