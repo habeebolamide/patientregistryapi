@@ -24,16 +24,16 @@ exports.webHook = async (req,res) => {
     let message = '';
 
     if (req.body.message.message.text == 'werey' ) {
-      message = 'Oloshi'
+      return message = 'Oloshi'
     }else if(req.body.message.message.text == 'omo iya haffa na'){
-      message = 'Omo sapa wan kill me jhare'
+      return message = 'Omo sapa wan kill me jhare'
     }
 
     const payload = {
       "channelId": req.body.message.channelId,
       "message": {
         "type": "text",
-        "text": 'werey',
+        "text": message,
         "messageTag": ""
       }
     };
