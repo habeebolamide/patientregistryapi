@@ -28,7 +28,7 @@ exports.webHook = async (req,res) => {
       message = 'My name is leke from EDUTams'
     }
     else{
-      message = 'My name is leke from EDUTams'
+      message = "Sorry I don't understand you"
     }
 
     const payload = {
