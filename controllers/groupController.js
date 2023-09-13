@@ -24,7 +24,7 @@ exports.webHook = async (req,res) => {
 
     if (req.body.message.message.text.toLowerCase()  == 'hi' ) {
       message = 'Hello, How can i help you today !'
-    }else if(req.body.message.message.text.toLowerCase() == 'what is your name'){
+    }else if(req.body.message.message.text.toLowerCase() == 'what is your name?'){
       message = 'My name is leke from EDUTams'
     }
     else{
