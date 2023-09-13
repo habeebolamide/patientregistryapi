@@ -22,9 +22,9 @@ exports.webHook = async (req,res) => {
     const apiUrl = `https://api.respond.io/v2/contact/${identifier}/message`; 
     let message = '';
 
-    if (req.body.message.message.text == 'Hi' ) {
+    if (req.body.message.message.text.toLowerCase()  == 'Hi' ) {
       message = 'Hello, How can i help you today !'
-    }else if(req.body.message.message.text == 'What is your name'){
+    }else if(req.body.message.message.text.toLowerCase() == 'What is your name'){
       message = 'My name is leke from EDUTams'
     }
     else{
