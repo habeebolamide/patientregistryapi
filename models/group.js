@@ -12,11 +12,10 @@ const groupSchema = new mongoose.Schema(
       ref: 'Patient'
     }],
 
-    // disease : {
-    //   type: mongoose.Schema.Types.ObjectId,
-    //   ref: 'Disease',
-    //   required:true
-    // },
+    disease : {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Disease',
+    },
 
     isLocked :{
       type: String,
