@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require("cors");
 require('dotenv').config();
+const dashboard = require('./routes/dashboard')
 const patient = require('./routes/patient')
 const group = require('./routes/group')
 const disease = require('./routes/disease')
@@ -13,6 +14,7 @@ app.get('/', (req,res) => {
     res.render('index')
 })
 app.use('/uploads', express.static('uploads'))
+app.use('/api/v1/dashboard', dashboard);
 app.use('/api/v1/patient', patient);
 app.use('/api/v1/group', group);
 app.use('/api/v1/disease', disease);
