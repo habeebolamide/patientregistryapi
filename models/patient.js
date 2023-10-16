@@ -2,7 +2,7 @@
 /* eslint-disable consistent-return */
 const mongoose = require("mongoose");
 const bcrypt = require('bcrypt')
-
+const userTypes = ['user', 'admin'];
 
 const patientSchema = new mongoose.Schema(
   {
@@ -33,6 +33,11 @@ const patientSchema = new mongoose.Schema(
       type: String,
       required: true,
       unique: true
+    },
+    user_type: {
+      type: String,
+      enum: userTypes,
+      default: 'user'
     },
     password: {
       type: String,
